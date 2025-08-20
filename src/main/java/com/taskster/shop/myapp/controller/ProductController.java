@@ -40,18 +40,26 @@ public class ProductController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     // only for testing purpose
     @PostMapping("/add-singleproduct")
     public ResponseEntity<ProductEntity> createProduct(@RequestBody ProductEntity product) {
-        ProductEntity createdProduct = productService.createProduct(product);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
+       try {
+           ProductEntity createdProduct = productService.createProduct(product);
+           return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
+       } catch (RuntimeException e) {
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+       }
     }
 
     @PostMapping("/bulk")
     public ResponseEntity<List<ProductEntity>> createProducts(@RequestBody List<ProductEntity> products) {
-        List<ProductEntity> createdProducts = productService.createProducts(products);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdProducts);
+        try {
+            List<ProductEntity> createdProducts = productService.createProducts(products);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdProducts);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
 }

@@ -2,6 +2,8 @@ package com.taskster.shop.myapp.services;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.taskster.shop.myapp.model.ProductEntity;
@@ -10,7 +12,7 @@ import com.taskster.shop.myapp.repo.ProductRepo;
 @Service
 public class ProductService {
     private final ProductRepo productRepo;
-
+    Logger logger = LoggerFactory.getLogger(ProductService.class);
     public ProductService(ProductRepo productRepo) {
         this.productRepo = productRepo;
     }
@@ -20,8 +22,11 @@ public class ProductService {
     }
 
     public ProductEntity getProductById(String productId) {
-        return productRepo.findByProductId(productId)
+        logger.info("Fetching product with productId: {}", productId);
+        ProductEntity product = productRepo.findByProductId(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found with productId: " + productId));
+        logger.info("Fetched product: {}", product);
+        return product;
     }
 
     public ProductEntity createProduct(ProductEntity product) {
